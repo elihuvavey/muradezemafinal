@@ -1,0 +1,48 @@
+workflows:
+  flutter-ios:
+    name: Flutter iOS
+    max_build_duration: 120
+    environment:
+      flutter: 3.24.0
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up iOS dependencies
+        script: |
+          cd ios && pod install --repo-update
+      - name: Get Flutter dependencies
+        script: |
+          flutter pub get
+      - name: Build iOS for simulator
+        script: |
+          flutter build ios --simulator --no-codesign
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+    publishing:
+      email:
+        recipients:
+          - user@example.com
+
+  flutter-ios-release:
+    name: Flutter iOS Release
+    max_build_duration: 120
+    environment:
+      flutter: 3.24.0
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up iOS dependencies
+        script: |
+          cd ios && pod install --repo-update
+      - name: Get Flutter dependencies
+        script: |
+          flutter pub get
+      - name: Build iOS for release
+        script: |
+          flutter build ipa --release
+    artifacts:
+      - build/app/outputs/ios-ipa/*.ipa
+    publishing:
+      email:
+        recipients:
+          - user@example.com

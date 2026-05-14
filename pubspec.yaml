@@ -1,0 +1,91 @@
+name: muradezema
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.9+1778759346
+
+environment:
+  sdk: ^3.6.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  
+  cupertino_icons: ^1.0.8
+  flutter_screenutil: ^5.9.3
+  just_audio: ^0.9.46
+  video_player: ^2.9.5
+
+  # Keep screen awake
+  wakelock_plus: ^1.3.2
+
+  # WebView plugins
+  webview_flutter: ^4.13.0
+  webview_flutter_wkwebview: ^3.23.0
+  provider: ^6.1.4
+  google_fonts: ^8.1.0
+  flutter_pdfview: ^1.4.0
+  flutter_widget_from_html: ^0.16.0
+  shared_preferences: ^2.5.3
+  dio: ^5.8.0+1
+  loading_animation_widget: ^1.3.0
+  flutter_local_notifications: ^17.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  screen_go: ^1.1.8
+  audio_service: ^0.18.18
+  path_provider: ^2.1.5
+  just_audio_background: ^0.0.1-beta.15
+  android_content_provider: ^0.5.1
+  rxdart: ^0.28.0
+  device_info_plus: ^11.3.0
+  permission_handler: ^11.4.0
+  lucide_icons: ^0.257.0
+  syncfusion_flutter_pdfviewer: ^29.1.37
+  no_screenshot: ^0.3.1
+  chewie: ^1.11.1
+  flutter_cache_manager: ^3.4.1
+  receive_intent: ^0.2.7
+  sliding_up_panel: ^2.0.0+1
+  intl: ^0.20.2
+  marquee: ^2.3.0
+  share_plus: ^11.0.0
+  image_picker: ^1.1.2
+  flutter_inappwebview: ^6.1.5
+  pin_code_fields: ^8.0.0
+  flutter_dotenv: ^5.2.1
+  # geocoding: ^3.0.0
+  # geolocator: ^11.0.0
+  firebase_core: ^4.8.0
+  firebase_messaging: ^16.2.1
+
+
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1  
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logocolored.png"  
+  adaptive_icon_foreground: "assets/images/logocolored.png"  
+  adaptive_icon_background: "#ffffff"  
+
+flutter:
+
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/audios/
+    - assets/videos/
+    - assets/pdf/
+    - .env
+  
