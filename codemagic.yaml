@@ -7,12 +7,12 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Set up iOS dependencies
-        script: |
-          cd ios && pod deintegrate && pod install --repo-update
       - name: Get Flutter dependencies
         script: |
           flutter clean && flutter pub get
+      - name: Set up iOS dependencies
+        script: |
+          cd ios && pod deintegrate && pod install --repo-update
       - name: Build for iOS Simulator
         script: |
           flutter build ios --simulator --debug
@@ -27,12 +27,12 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Set up iOS dependencies
-        script: |
-          cd ios && pod deintegrate && pod install --repo-update
       - name: Get Flutter dependencies
         script: |
           flutter clean && flutter pub get
+      - name: Set up iOS dependencies
+        script: |
+          cd ios && pod deintegrate && pod install --repo-update
       - name: Build iOS release
         script: |
           flutter build ipa --release
