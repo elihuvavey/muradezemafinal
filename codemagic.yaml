@@ -9,10 +9,10 @@ workflows:
     scripts:
       - name: Get Flutter dependencies
         script: |
-          flutter clean && flutter pub get
+          flutter pub get
       - name: Set up iOS dependencies
         script: |
-          cd ios && pod deintegrate && pod install --repo-update
+          cd ios && pod install --repo-update
       - name: Build for iOS Simulator
         script: |
           flutter build ios --simulator --debug
@@ -29,10 +29,10 @@ workflows:
     scripts:
       - name: Get Flutter dependencies
         script: |
-          flutter clean && flutter pub get
+          flutter pub get
       - name: Set up iOS dependencies
         script: |
-          cd ios && pod deintegrate && pod install --repo-update
+          cd ios && pod install --repo-update
       - name: Build iOS release
         script: |
           flutter build ipa --release
