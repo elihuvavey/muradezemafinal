@@ -1,7 +1,7 @@
 workflows:
-  ios-release:
-    name: Murade Zema iOS Release
-    max_build_duration: 120
+  ios-simulator:
+    name: iOS Simulator Preview
+    max_build_duration: 60
     environment:
       flutter: 3.41.9
       xcode: latest
@@ -13,12 +13,8 @@ workflows:
       - name: Get Flutter dependencies
         script: |
           flutter pub get
-      - name: Build iOS release
+      - name: Build for iOS Simulator
         script: |
-          flutter build ipa --release
+          flutter build ios --simulator --debug
     artifacts:
-      - build/ios/ipa/*.ipa
-    publishing:
-      email:
-        recipients:
-          - afroeltechnologies@gmail.com
+      - build/ios/iphonesimulator/Runner.app
