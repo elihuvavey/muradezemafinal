@@ -15,32 +15,15 @@ jobs:
       - run: |
           cd ios
           pod install --repo-update
-      - run: flutter build ios --release --no-codesign
-      - name: Create ExportOptions
-        run: |
-          cat > ios/ExportOptions.plist << PLISTEOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>method</key>
-            <string>app-store</string>
-            <key>teamID</key>
-            <string>K7R3D85XYA</string>
-            <key>signingStyle</key>
-            <string>automatic</string>
-          </dict>
-          </plist>
-          PLISTEOF
-      - name: Archive
+      - name: Build with xcodebuild
         run: |
           cd ios
           xcodebuild -workspace Runner.xcworkspace \
             -scheme Runner \
             -configuration Release \
-            -archivePath build/Runner.xcarchive \
+            -sdk iphoneos \
             -destination 'generic/platform=iOS' \
-            DEVELOPMENT_TEAM=K7R3D85XYA \
-            CODE_SIGN_STYLE=Automatic \
-            -allowProvisioningUpdates \
-            archive
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
