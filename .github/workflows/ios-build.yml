@@ -15,10 +15,32 @@ jobs:
       - run: |
           cd ios
           pod install --repo-update
-      - name: Set Development Team
+      - run: flutter build ios --release --no-codesign
+      - name: Create ExportOptions
+        run: |
+          cat > ios/ExportOptions.plist << PLISTEOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>teamID</key>
+            <string>K7R3D85XYA</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
+          </dict>
+          </plist>
+          PLISTEOF
+      - name: Archive
         run: |
           cd ios
-          /usr/libexec/PlistBuddy -c "Add :DevelopmentTeam string K7R3D85XYA" Runner.xcodeproj/project.pbxproj 2>/dev/null || true
-          sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = K7R3D85XYA;/g' Runner.xcodeproj/project.pbxproj
-          sed -i '' 's/DEVELOPMENT_TEAM = [^;]*;/DEVELOPMENT_TEAM = K7R3D85XYA;/g' Runner.xcodeproj/project.pbxproj
-      - run: flutter build ios --release --no-codesign
+          xcodebuild -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath build/Runner.xcarchive \
+            -destination 'generic/platform=iOS' \
+            DEVELOPMENT_TEAM=K7R3D85XYA \
+            CODE_SIGN_STYLE=Automatic \
+            -allowProvisioningUpdates \
+            archive
