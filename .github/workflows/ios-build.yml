@@ -33,4 +33,8 @@ jobs:
           APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
         run: |
           cd ios
-          fastlane ios beta
+          fastlane ios beta --verbose
+      - name: Upload build log on failure
+        if: failure()
+        run: |
+          cat /Users/runner/Library/Logs/gym/Runner-Runner.log
