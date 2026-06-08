@@ -8,8 +8,8 @@ platform :ios do
     )
     cert(api_key: api_key, keychain_password: "")
     sigh(force: true, api_key: api_key)
-    sh("security export -k login.keychain-db -t identities -f pkcs12 -P 'Asi@123;;;' -o certificate.p12")
-    sh("base64 -i certificate.p12 -o certificate.p12.base64")
+    sh("security export -k login.keychain-db -t identities -f pkcs12 -P temp123 -o certificate.p12 || true")
+    sh("base64 -i certificate.p12 -o certificate.p12.base64 || true")
     increment_build_number(xcodeproj: "Runner.xcodeproj")
     gym(
       scheme: "Runner",
