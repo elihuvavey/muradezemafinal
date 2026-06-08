@@ -30,6 +30,8 @@ workflows:
       flutter: 3.41.9
       xcode: latest
       cocoapods: default
+    code_signing:
+      automatic: true
     scripts:
       - name: Get Flutter dependencies
         script: flutter pub get
