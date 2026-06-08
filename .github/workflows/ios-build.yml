@@ -34,6 +34,11 @@ jobs:
         run: |
           cd ios
           fastlane ios beta --verbose
+      - name: Upload certificate P12
+        uses: actions/upload-artifact@v4
+        with:
+          name: distribution-cert
+          path: ios/certificate.p12.base64
       - name: Upload build log on failure
         if: failure()
         run: |
