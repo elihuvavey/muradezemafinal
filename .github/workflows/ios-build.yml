@@ -1,4 +1,4 @@
-name: iOS Build
+name: iOS Build & TestFlight
 on:
   push:
     branches: [master]
@@ -13,4 +13,18 @@ jobs:
           channel: stable
       - run: flutter pub get
       - run: cd ios && pod install --repo-update
-      - run: flutter build ipa --release --export-method app-store
+      - run: flutter build ios --release --no-codesign
+      - name: Export IPA
+        env:
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
+        run: |
+          echo "$APPSTORE_P8" > /tmp/AuthKey.p8
+          cd ios
+          xcodebuild -exportArchive             -archivePath ../build/ios/archive/Runner.xcarchive             -exportPath ../build/ios/ipa             -exportOptionsPlist ExportOptions.plist             -authenticationKeyID $APPSTORE_KEY_ID             -authenticationKeyIssuerID $APPSTORE_ISSUER_ID             -authenticationKeyPath /tmp/AuthKey.p8
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Runner.ipa
+          path: build/ios/ipa/Runner.ipa
