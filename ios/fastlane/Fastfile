@@ -7,9 +7,10 @@ platform :ios do
       key_content: ENV["APPSTORE_P8"]
     )
     cert(api_key: api_key, keychain_password: "")
-    sigh(force: true, api_key: api_key, skip_install: false)
+    sigh(force: true, api_key: api_key)
+    profile_name = lane_context[SharedValues::SIGH_NAME]
     increment_build_number(xcodeproj: "Runner.xcodeproj")
-    sh("cd .. && flutter build ipa --release --export-method app-store")
+    sh("cd .. && flutter build ipa --release --export-options-plist=ios/ExportOptions.plist")
     pilot(api_key: api_key)
   end
 end
