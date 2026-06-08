@@ -22,9 +22,8 @@ jobs:
         run: |
           echo "$APPSTORE_P8" > /tmp/AuthKey.p8
           cd ios
-          xcodebuild -exportArchive             -archivePath ../build/ios/archive/Runner.xcarchive             -exportPath ../build/ios/ipa             -exportOptionsPlist ExportOptions.plist             -authenticationKeyID $APPSTORE_KEY_ID             -authenticationKeyIssuerID $APPSTORE_ISSUER_ID             -authenticationKeyPath /tmp/AuthKey.p8
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
+          xcodebuild -exportArchive -archivePath ../build/ios/archive/Runner.xcarchive -exportPath ../build/ios/ipa -exportOptionsPlist ExportOptions.plist -authenticationKeyID $APPSTORE_KEY_ID -authenticationKeyIssuerID $APPSTORE_ISSUER_ID -authenticationKeyPath /tmp/AuthKey.p8
+      - uses: actions/upload-artifact@v4
         with:
           name: Runner.ipa
           path: build/ios/ipa/Runner.ipa
