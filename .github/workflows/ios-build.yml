@@ -1,10 +1,14 @@
-name: iOS Build
+name: iOS Build & TestFlight
 on:
   push:
     branches: [master]
 jobs:
   build:
     runs-on: macos-latest
+    env:
+      APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+      APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+      APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -15,7 +19,13 @@ jobs:
       - run: |
           cd ios
           pod install --repo-update
-      - run: flutter build ios --release --no-codesign 2>&1 | tee build.log
-      - name: Show errors only
-        if: failure()
-        run: grep -i "error" build.log || echo "No error lines found"
+      - name: Install Fastlane
+        run: gem install fastlane --no-document
+      - name: Create certs and upload
+        env:
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
+        run: |
+          cd ios
+          fastlane ios beta

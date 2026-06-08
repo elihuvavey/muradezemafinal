@@ -9,6 +9,7 @@ platform :ios do
     cert(api_key: api_key, keychain_password: "")
     sigh(force: true, api_key: api_key)
     increment_build_number(xcodeproj: "Runner.xcodeproj")
+    gym(scheme: "Runner", export_method: "app-store")
     pilot(api_key: api_key)
   end
 end
