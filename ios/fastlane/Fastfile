@@ -7,7 +7,7 @@ platform :ios do
       key_content: ENV["APPSTORE_P8"]
     )
     cert(api_key: api_key, keychain_password: "")
-    sigh(force: true, api_key: api_key)
+    sigh(force: true, api_key: api_key, skip_install: false)
     increment_build_number(xcodeproj: "Runner.xcodeproj")
     sh("cd .. && flutter build ipa --release --export-method app-store")
     pilot(api_key: api_key)
