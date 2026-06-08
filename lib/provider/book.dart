@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -5,7 +6,7 @@ import '../models/book.dart';
 import '../utils/user_prefs.dart';
 
 class BookProvider with ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   final String _endpoint = '${dotenv.env['BASE_URL']}/books';
 
   List<Book> _books = [];
@@ -24,7 +25,7 @@ class BookProvider with ChangeNotifier {
     try {
       final response = await _dio.get(_endpoint,
           options: Options(headers: {
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           }));
 
       if (response.statusCode == 200) {

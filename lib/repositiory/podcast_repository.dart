@@ -1,10 +1,11 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:muradezema/utils/endpoint.dart';
 
 import '../models/podcast_model.dart';
 
 class PodcastRepository {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
 
   Future<List<Podcast>> fetchPodcasts() async {
     try {

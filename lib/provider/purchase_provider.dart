@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 // providers/purchase_provider.dart
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -113,7 +114,7 @@ class PurchaseItem {
 }
 
 class PurchaseProvider with ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   List<PurchaseItem> _items = [];
   bool _isLoading = false;
   String? _error;

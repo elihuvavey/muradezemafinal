@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -312,7 +313,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() => _loading = true);
 
     final token = HivePrefs.getString('token');
-    final dio = Dio();
+    final dio = createDio();
     final form = FormData();
     form.fields
       ..add(MapEntry('user_id', HivePrefs.getInt('userId').toString()))
@@ -363,7 +364,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (!_pwFormKey.currentState!.validate()) return;
     // Call API to change password
     final token = HivePrefs.getString('token');
-    final dio = Dio();
+    final dio = createDio();
     setState(() => _loading = true);
     debugPrint('Starting password change...');
     debugPrint('Token: $token');
@@ -587,7 +588,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           child: GestureDetector(
                             onTap: () async {
                               final token = HivePrefs.getString('token');
-                              final dio = Dio();
+                              final dio = createDio();
                               final form = FormData();
 
                               form.files.add(MapEntry(
@@ -663,7 +664,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: ElevatedButton(
                    onPressed: () async {
                       final token = HivePrefs.getString('token');
-                      final dio = Dio();
+                      final dio = createDio();
                       final form = FormData();
 
                       form.files.add(MapEntry(

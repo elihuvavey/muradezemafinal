@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -28,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     // Mark as read update
     Provider.of<NotificationProvider>(context, listen: false)
         .markAsRead(item.id);
-    Dio dio = Dio();
+    Dio dio = createDio();
     final response = await dio.get('${dotenv.env['BASE_URL']}/mynotification/${item.id}',
         options: Options(headers: {'Authorization': 'Bearer ${HivePrefs.getString('token')}'}));
 

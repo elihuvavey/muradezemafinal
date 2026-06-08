@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -40,12 +41,12 @@ class _PendingPaymentsScreenState extends State<PendingPaymentsScreen> {
       errorMessage = null;
     });
     try {
-      final dio = Dio();
+      final dio = createDio();
       final response = await dio.get(
         ApiConstants.pendingPayments,
         options: Options(headers: {
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+          
         }),
       );
       if (response.statusCode == 200 && response.data != null) {
@@ -345,7 +346,7 @@ class _PendingPaymentsScreenState extends State<PendingPaymentsScreen> {
                                       child: CircularProgressIndicator()),
                                 );
                                 try {
-                                  final dio = Dio();
+                                  final dio = createDio();
                                   final formData = FormData();
                                   formData.fields
                                     ..add(MapEntry(

@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -88,10 +89,10 @@ class _BookListScreenState extends State<BookListScreen> {
                         onTap: book.isPurchased
                             ? () async {
                                 try {
-                                  final resp = await Dio().get(
+                                  final resp = await createDio().get(
                                       '${ApiConstants.baseUrl}/books/${book.id}/read', options: Options(
                                         headers: {
-                                          'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+                                          
                                         },
                                       ));
                                   final pdfUrl = resp.data['pdf'] as String;

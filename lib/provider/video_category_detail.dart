@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../models/video_category_detail.dart';
@@ -5,7 +6,7 @@ import '../utils/user_prefs.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class VideoCategoryDetailProvider extends ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   final String baseUrl = '${dotenv.env['BASE_URL']}/video';
 
   VideoCategoryDetail? _categoryDetail;
@@ -21,7 +22,7 @@ class VideoCategoryDetailProvider extends ChangeNotifier {
     try {
       final response = await _dio.get('$baseUrl/$categoryId/category',
           options: Options(headers: {
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           }));
       print('datas ${response.data}');
 

@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:muradezema/utils/endpoint.dart';
@@ -6,7 +7,7 @@ import '../models/book_season.dart';
 import '../utils/user_prefs.dart';
 
 class BookSeasonProvider with ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   List<BookSeason> _books = [];
 
   List<BookSeason> get books => _books;
@@ -16,7 +17,7 @@ class BookSeasonProvider with ChangeNotifier {
       final response =
           await _dio.get('${ApiConstants.baseUrl}/book/$categoryId/category',
               options: Options(headers: {
-                'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+                
               }));
         print("response dfdfd ${response.data}");
 

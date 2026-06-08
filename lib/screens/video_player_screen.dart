@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -89,12 +90,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     try {
       final url = "${ApiConstants.baseUrl}/video/episodes/$id/play";
       debugPrint('Check purchase URL: $url');
-      final response = await Dio().get(
+      final response = await createDio().get(
         url,
         options: Options(
           headers: {
             'Accept': 'application/json',
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           },
           validateStatus: (status) => status! < 500,
         ),

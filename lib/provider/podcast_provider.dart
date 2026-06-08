@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,11 +21,11 @@ class EpisodesProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      Dio dio = Dio();
+      Dio dio = createDio();
       final response = await dio.get(
           '${dotenv.env['BASE_URL']}/video/episodes/related/$seasonId',
           options: Options(headers: {
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           }));
 
       if (response.statusCode == 200) {

@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -35,7 +36,7 @@ class SearchResult {
 }
 
 class SearchProvider extends ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   bool _isLoading = false;
   String? _errorMessage;
   SearchResult? _result;
@@ -59,7 +60,7 @@ class SearchProvider extends ChangeNotifier {
     try {
       final response = await _dio.get(url,
           options: Options(headers: {
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           }));
       if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
         print('resp ${response.data}');

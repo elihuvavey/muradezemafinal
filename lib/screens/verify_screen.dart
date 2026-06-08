@@ -156,7 +156,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     "email": email,
                   },
                   headers: {
-                    'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+                    
                     'Accept': 'application/json'
                   },
                 );

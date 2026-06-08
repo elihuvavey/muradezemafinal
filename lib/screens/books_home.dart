@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -573,7 +574,7 @@ class _AudioHomeScreenState extends State<AudioHomeScreen> {
                               itemBuilder: (context, index) => InkWell(
                                 onTap: value.sales[index].product.isPurchased
                                     ? () async {
-                                        final Dio dio = Dio();
+                                        final Dio dio = createDio();
                                         try {
                                           final response = await dio.post(
                                             '${dotenv.env['BASE_URL']!}/audio/episodes/${value.sales[index].product.id}/play',
@@ -720,7 +721,7 @@ class ViewAllTopSellingScreen extends StatelessWidget {
             itemCount: value.sales.length,
             itemBuilder: (context, index) => InkWell(
               onTap: () async {
-                final Dio dio = Dio();
+                final Dio dio = createDio();
                 try {
                   final response = await dio.post(
                     '${dotenv.env['BASE_URL']!}/audio/episodes/${value.sales[index].product.id}/play',

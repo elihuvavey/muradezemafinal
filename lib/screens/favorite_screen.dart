@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:muradezema/screens/book_list.dart';
@@ -94,7 +95,7 @@ class _FavoriteList extends StatelessWidget {
             return InkWell(
               onTap: () async {
                 if (type == 'audio') {
-                  final Dio dio = Dio();
+                  final Dio dio = createDio();
                   try {
                     final response = await dio.post(
                       "${dotenv.env['BASE_URL']}/audio/episodes/$id/play",
@@ -147,7 +148,7 @@ class _FavoriteList extends StatelessWidget {
                 if (type == 'book')  {
                   debugPrint('favorite: ${favorite['isPurchased']}');
                 if(favorite['isPurchased'] == true) { try {
-                    final resp = await Dio()
+                    final resp = await createDio()
                         .get('${dotenv.env['BASE_URL']}/books/$id/read',
                          options: Options(
                                 headers: {
@@ -185,7 +186,7 @@ class _FavoriteList extends StatelessWidget {
                 }
                 if (type == 'video') {
                   try {
-                    final response = await Dio().get(
+                    final response = await createDio().get(
                       "${dotenv.env['BASE_URL']}/video/episodes/$id/play",
                       options: Options(
                         headers: {

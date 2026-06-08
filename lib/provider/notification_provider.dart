@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -42,7 +43,7 @@ class NotificationItem {
 }
 
 class NotificationProvider with ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   List<NotificationItem> _notifications = [];
   bool _isLoading = false;
   String? _error;

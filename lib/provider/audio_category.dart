@@ -1,11 +1,12 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/audio_category.dart';
-import '../utils/user_prefs.dart';
+import '../utils/api_headers.dart';
 
 class AudioCategoryProvider with ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   List<AudioModel> _audios = [];
   bool _isLoading = false;
 
@@ -19,9 +20,7 @@ class AudioCategoryProvider with ChangeNotifier {
     try {
       final response =
           await _dio.get('${dotenv.env['BASE_URL']}/audio/data/index/',
-              options: Options(headers: {
-                'Authorization': 'Bearer ${HivePrefs.getString('token')}',
-              }));
+              options: Options(headers: authHeaders()));
 
       if (response.statusCode == 200) {
         print('response ${response.data}');

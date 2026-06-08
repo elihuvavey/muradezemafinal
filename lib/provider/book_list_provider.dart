@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -102,14 +103,14 @@ class BookModel {
 }
 
 class BookService {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
 
   Future<List<BookModel>> fetchBooksBySubcatId(String subcatId) async {
     final String url = '${dotenv.env['BASE_URL']}/book/category/$subcatId';
     try {
       final response = await _dio.get(url,
           options: Options(headers: {
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           }));
       if (response.statusCode == 200) {
         print('books data ${response.data}');

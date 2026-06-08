@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -195,7 +196,7 @@ class _ArtistAudioListScreenState extends State<ArtistAudioListScreen> {
 
   Future<void> playSong(dynamic episode) async {
     debugPrint('Attempting to play song: ${episode.title}');
-    final Dio dio = Dio();
+    final Dio dio = createDio();
     try {
       debugPrint('Fetching audio URL from API...');
       final response = await dio.post(
@@ -204,7 +205,7 @@ class _ArtistAudioListScreenState extends State<ArtistAudioListScreen> {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           },
         ),
       );

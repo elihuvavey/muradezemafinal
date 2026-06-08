@@ -709,7 +709,7 @@ class AudioPlayerHandler extends BaseAudioHandler
           queue.add(_queue);
 
           // Fetch the audio URL from the API
-          final Dio dio = Dio();
+          final Dio dio = createDio();
           try {
             print('Fetching audio URL for ID: $id');
             final response = await dio.post(

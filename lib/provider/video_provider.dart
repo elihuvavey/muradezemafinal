@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:muradezema/utils/endpoint.dart';
@@ -5,7 +6,7 @@ import '../models/video_model.dart';
 import '../utils/user_prefs.dart';
 
 class VideoProvider with ChangeNotifier {
-  final Dio _dio = Dio(); 
+  final Dio _dio = createDio(); 
   List<Video> _videos = [];
 
   List<Video> get videos => _videos;
@@ -21,7 +22,7 @@ class VideoProvider with ChangeNotifier {
       print("Fetching videoss from ${ApiConstants.videosUrl}");
 
       final response = await _dio.get(ApiConstants.videosUrl, options: Options(headers: {
-         'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+         
       }));
 
       print("Response status: ${response.statusCode}");

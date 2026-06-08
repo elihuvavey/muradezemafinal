@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:muradezema/utils/endpoint.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class TopSellingListScreen extends StatelessWidget {
                   itemCount: value.sales.length,
                   itemBuilder: (context, index) => InkWell(
                     onTap: () async {
-                      final Dio dio = Dio();
+                      final Dio dio = createDio();
                       try {
                         final response = await dio.post(
                           "${ApiConstants.baseUrl}/audio/episodes/${value.sales[index].product.id}/play",
@@ -122,7 +123,7 @@ class TopSellingListScreen extends StatelessWidget {
                                         ),
                                       );
                                       try {
-                                        final response = await Dio().get(
+                                        final response = await createDio().get(
                                           "${ApiConstants.baseUrl}/video/episodes/${episode.product.id}/play",
                                           options: Options(
                                             headers: {
@@ -267,7 +268,7 @@ class TopSellingListScreen extends StatelessWidget {
                             onTap: value.sales[index].product.isPurchased
                                 ? () async {
                                     try {
-                                      final resp = await Dio().get(
+                                      final resp = await createDio().get(
                                           '${ApiConstants.baseUrl}/books/${value.sales[index].product.id}/read');
                                       final pdfUrl = resp.data['pdf'] as String;
                                       if (pdfUrl.isNotEmpty) {

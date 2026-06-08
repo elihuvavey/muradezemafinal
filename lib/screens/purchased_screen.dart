@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -521,13 +522,13 @@ class _PurchasedFilesPageState extends State<PurchasedFilesPage> {
                   });
             }
           : () async {
-              final Dio dio = Dio();
+              final Dio dio = createDio();
               try {
                 final response = await dio.post(
                   '${dotenv.env['BASE_URL']!}/audio/episodes/${item.id}/play',
                   options: Options(
                     headers: {
-                      'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+                      
                     },
                   ),
                 );

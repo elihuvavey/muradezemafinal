@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -452,7 +453,7 @@ class _BookHomeScreenState extends State<BookHomeScreen> {
                                       ),
                                     );
                                     try {
-                                      final resp = await Dio().get(
+                                      final resp = await createDio().get(
                                           '${ApiConstants.baseUrl}/books/${value.sales[index].product.id}/read',
                                           options: Options(
                                             headers: {

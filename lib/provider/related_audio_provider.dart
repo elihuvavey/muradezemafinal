@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:muradezema/utils/endpoint.dart';
@@ -11,7 +12,7 @@ class RelatedAudioProvider with ChangeNotifier {
   List<RelatedAudio> get relatedAudios => _relatedAudios;
   bool get isLoading => _isLoading;
 
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
 
   Future<void> fetchRelatedAudios(int audioId) async {
     _isLoading = true;
@@ -22,7 +23,7 @@ class RelatedAudioProvider with ChangeNotifier {
 
     try {
       final response = await _dio.get(url, options: Options(headers: {
-         'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+         
       }));
       print('Response related: ${response.data}');
 

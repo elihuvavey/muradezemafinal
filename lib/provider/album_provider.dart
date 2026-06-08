@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -6,7 +7,7 @@ import '../models/album_model.dart';
 import '../utils/user_prefs.dart';
 
 class AlbumProvider with ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   List<AlbumModel> _albums = [];
   bool _isLoading = false;
   String? _errorMessage;
@@ -24,7 +25,7 @@ class AlbumProvider with ChangeNotifier {
       final response =
           await _dio.get('${dotenv.env['BASE_URL']}/audio/albumList/$artistId',
               options: Options(headers: {
-                'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+                
               }));
 
       if (response.statusCode == 200) {

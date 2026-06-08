@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,10 +23,10 @@ class RelatedVideoProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      Dio dio = Dio();
+      Dio dio = createDio();
       final response = await dio.get(url,
           options: Options(headers: {
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           }));
 
       print('response dd ${response.data}');

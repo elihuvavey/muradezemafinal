@@ -1,16 +1,17 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:muradezema/utils/endpoint.dart';
 import '../models/season_model.dart';
 import '../utils/user_prefs.dart'; // Adjust the import as needed
 
 class SeasonRepository {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
 
   Future<List<Season>> fetchSeasons(String id) async {
     try {
       final String url = "${ApiConstants.seasons}$id";
       final response = await _dio.get(url, options: Options(headers: {
-         'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+         
       }));
 
       if (response.statusCode == 200) {

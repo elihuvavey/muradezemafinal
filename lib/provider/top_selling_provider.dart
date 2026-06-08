@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -56,13 +57,13 @@ class SaleItem {
 }
 
 class SaleService {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
 
   Future<List<SaleItem>> fetchTopSellingAudio(String type) async {
     try {
       final response = await _dio.get('${dotenv.env['BASE_URL']}/top-selling',
           options: Options(headers: {
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           }),
           queryParameters: {
             'type': type,

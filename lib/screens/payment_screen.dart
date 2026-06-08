@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -85,7 +86,7 @@ class _PaymentPageState extends State<PaymentPage> {
       banksError = null;
     });
     try {
-      final dio = Dio();
+      final dio = createDio();
       final response = await dio.get(ApiConstants.banks);
       debugPrint(
           'Fetching banks: statusCode=${response.statusCode}, data=${response.data}');
@@ -454,7 +455,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                                       CircularProgressIndicator()),
                                                         );
                                                         try {
-                                                          final dio = Dio();
+                                                          final dio = createDio();
                                                           final response =
                                                               await dio.post(
                                                             url,
@@ -650,7 +651,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         builder: (context) {
           return FutureBuilder(
-            future: Dio().get(ApiConstants.banks),
+            future: createDio().get(ApiConstants.banks),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Padding(
@@ -772,7 +773,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
     setState(() => isLoading = true);
 
-    final dio = Dio();
+    final dio = createDio();
 
     try {
       debugPrint('Making payment request...');

@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -219,7 +220,7 @@ class _SearchScreenState extends State<SearchScreen>
                           onTap: () async {
                             if (labels[ctl.index] == 'Songs' &&
                                 item["is_purchased"] == true) {
-                              final Dio dio = Dio();
+                              final Dio dio = createDio();
                               try {
                                 final response = await dio.post(
                                   "${dotenv.env['BASE_URL']}/audio/episodes/$id/play",
@@ -341,7 +342,7 @@ class _SearchScreenState extends State<SearchScreen>
                             } else if (label == 'EpisodeAudioBooks' &&
                                 item["is_purchased"] == true) {
                               try {
-                                final resp = await Dio().get(
+                                final resp = await createDio().get(
                                     "${dotenv.env['BASE_URL']}/books/$id/read",
                                     options: Options(
                                       headers: {

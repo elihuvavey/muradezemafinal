@@ -1,10 +1,11 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import '../utils/endpoint.dart';
 import '../utils/user_prefs.dart';
 
 class BankProvider with ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
   List<Map<String, dynamic>> _banks = [];
   bool _isLoading = false;
   String? _errorMessage;
@@ -22,7 +23,7 @@ class BankProvider with ChangeNotifier {
         ApiConstants.banks,
         options: Options(headers: {
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+          
         }),
       );
       if (response.statusCode == 200 && response.data != null) {

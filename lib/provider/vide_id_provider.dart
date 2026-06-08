@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:muradezema/utils/endpoint.dart';
@@ -18,8 +19,8 @@ class VideoIdProvider with ChangeNotifier {
     final url = '${ApiConstants.videosUrl}/$id';
 
     try {
-      final response = await Dio().get(url, options: Options(headers: {
-         'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+      final response = await createDio().get(url, options: Options(headers: {
+         
       }));
       print('Response status: ${response.statusCode}');
       print('Raw response data id: ${response.data}');

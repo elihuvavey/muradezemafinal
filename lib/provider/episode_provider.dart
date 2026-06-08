@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -72,14 +73,14 @@ class SongModel {
 }
 
 class AudioServices {
-  final Dio _dio = Dio();
+  final Dio _dio = createDio();
 
   Future<List<SongModel>> fetchSongsByAlbumId(String albumId) async {
     final String url = '${dotenv.env['BASE_URL']}/audio/songList/$albumId';
     try {
       final response = await _dio.get(url,
           options: Options(headers: {
-            'Authorization': 'Bearer ${HivePrefs.getString('token')}',
+            
           }));
 
       print('tracks  [36m${response.data}');

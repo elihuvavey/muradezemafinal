@@ -1,3 +1,4 @@
+import 'package:muradezema/utils/dio_client.dart';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -47,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     setState(() => _isLoading = true);
 
-    final dio = Dio();
+    final dio = createDio();
     dio.options.baseUrl = ApiConstants.baseUrl;
     dio.options.headers = {
       'Content-Type': 'application/json',
