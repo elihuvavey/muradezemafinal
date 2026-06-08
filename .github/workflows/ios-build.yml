@@ -15,4 +15,4 @@ jobs:
       - run: |
           cd ios
           pod install --repo-update
-      - run: flutter build ipa --release --export-method app-store --no-codesign
+      - run: flutter build ipa --release --export-method app-store --no-codesign --team K7R3D85XYA
