@@ -1,15 +1,10 @@
-name: iOS Build & TestFlight
+name: iOS Build
 on:
   push:
     branches: [master]
 jobs:
   build:
     runs-on: macos-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
-      APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-      APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -20,7 +15,4 @@ jobs:
       - run: |
           cd ios
           pod install --repo-update
-      - run: gem install fastlane --no-document
-      - run: |
-          cd ios
-          fastlane ios beta
+      - run: flutter build ipa --release --export-method app-store
