@@ -30,6 +30,7 @@ jobs:
           cd ios
           fastlane ios beta
       - name: Upload P12 artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: certificate
