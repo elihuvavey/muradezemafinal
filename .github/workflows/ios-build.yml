@@ -1,71 +1,36 @@
-name: iOS Build & App Store
-
+name: iOS Build & TestFlight
 on:
   push:
     branches: [master]
-
 jobs:
   build:
     runs-on: macos-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+      APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+      APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
-
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.41.9'
           channel: stable
-
-      - name: Flutter pub get
+      - name: Get Flutter packages
         run: flutter pub get
-
-      - name: Pod install
+      - name: Install CocoaPods
         run: |
           cd ios
           pod install --repo-update
-
-      - name: Import certificate
+      - name: Install Fastlane
+        run: gem install fastlane --no-document
+      - name: Build & Upload
         env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-        run: |
-          echo "$BUILD_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
-          security create-keychain -p "" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
-          security import certificate.p12 -k build.keychain -P "$P12_PASSWORD" -A
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-
-      - name: Build iOS
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
         run: |
           cd ios
-          xcodebuild -workspace Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -archivePath build/Runner.xcarchive \
-            -destination 'generic/platform=iOS' \
-            archive \
-            CODE_SIGN_STYLE=Automatic \
-            DEVELOPMENT_TEAM=K7R3D85XYA
-
-      - name: Export IPA
-        run: |
-          cd ios
-          xcodebuild -exportArchive \
-            -archivePath build/Runner.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath build/ios
-
-      - name: Upload to App Store
-        env:
-          APPSTORE_USERNAME: ${{ secrets.APPSTORE_USERNAME }}
-          APPSTORE_PASSWORD: ${{ secrets.APPSTORE_PASSWORD }}
-        run: |
-          xcrun altool --upload-app -f ios/build/ios/Runner.ipa \
-            -t ios \
-            -u "$APPSTORE_USERNAME" \
-            -p "$APPSTORE_PASSWORD"
+          fastlane ios beta
