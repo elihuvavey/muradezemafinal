@@ -8,8 +8,10 @@ platform :ios do
     )
     cert(api_key: api_key, keychain_password: "")
     sigh(force: true, api_key: api_key)
+    profile_path = lane_context[SharedValues::SIGH_PROFILE_PATH]
     increment_build_number(xcodeproj: "Runner.xcodeproj")
-    sh("cd .. && flutter build ipa --release --export-method app-store --team K7R3D85XYA")
-    pilot(api_key: api_key)
+    sh("cd .. && flutter build ios --release --no-codesign")
+    sh("cd .. && xcodebuild -exportArchive -archivePath build/ios/archive/Runner.xcarchive -exportPath build/ios/ipa -exportOptionsPlist ios/ExportOptions.plist")
+    pilot(api_key: api_key, ipa: "../build/ios/ipa/Runner.ipa")
   end
 end

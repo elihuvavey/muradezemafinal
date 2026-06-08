@@ -7,11 +7,6 @@
     <key>teamID</key>
     <string>K7R3D85XYA</string>
     <key>signingStyle</key>
-    <string>manual</string>
-    <key>provisioningProfiles</key>
-    <dict>
-        <key>com.app.muradezema</key>
-        <string>match AppStore com.app.muradezema</string>
-    </dict>
+    <string>automatic</string>
 </dict>
 </plist>
