@@ -15,8 +15,4 @@ jobs:
       - run: |
           cd ios
           pod install --repo-update
-      - run: |
-          cd ios
-          flutter build ios --release --no-codesign -- \
-            DEVELOPMENT_TEAM=K7R3D85XYA \
-            CODE_SIGN_STYLE=Automatic
+      - run: flutter build ios --release --no-codesign
