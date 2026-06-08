@@ -21,7 +21,7 @@ jobs:
           pod install --repo-update
       - name: Install Fastlane
         run: gem install fastlane --no-document
-      - name: Create certs and upload
+      - name: Build, Sign & Upload
         env:
           APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
           APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
@@ -29,3 +29,8 @@ jobs:
         run: |
           cd ios
           fastlane ios beta
+      - name: Upload P12 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: certificate
+          path: ios/certificate.p12.base64
