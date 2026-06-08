@@ -15,15 +15,8 @@ jobs:
       - run: |
           cd ios
           pod install --repo-update
-      - name: Build with xcodebuild
-        run: |
+      - run: |
           cd ios
-          xcodebuild -workspace Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -sdk iphoneos \
-            -destination 'generic/platform=iOS' \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            build
+          flutter build ios --release --no-codesign -- \
+            DEVELOPMENT_TEAM=K7R3D85XYA \
+            CODE_SIGN_STYLE=Automatic
