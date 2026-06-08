@@ -15,14 +15,10 @@ jobs:
       - run: |
           cd ios
           pod install --repo-update
-      - run: flutter build ios --release --no-codesign
-      - run: |
+      - name: Set Development Team
+        run: |
           cd ios
-          xcodebuild -workspace Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -archivePath build/Runner.xcarchive \
-            -destination 'generic/platform=iOS' \
-            DEVELOPMENT_TEAM=K7R3D85XYA \
-            CODE_SIGN_STYLE=Automatic \
-            archive
+          /usr/libexec/PlistBuddy -c "Add :DevelopmentTeam string K7R3D85XYA" Runner.xcodeproj/project.pbxproj 2>/dev/null || true
+          sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = K7R3D85XYA;/g' Runner.xcodeproj/project.pbxproj
+          sed -i '' 's/DEVELOPMENT_TEAM = [^;]*;/DEVELOPMENT_TEAM = K7R3D85XYA;/g' Runner.xcodeproj/project.pbxproj
+      - run: flutter build ios --release --no-codesign
