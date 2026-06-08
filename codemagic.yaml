@@ -8,14 +8,11 @@ workflows:
       cocoapods: default
     scripts:
       - name: Get Flutter dependencies
-        script: |
-          flutter pub get
+        script: flutter pub get
       - name: Set up iOS dependencies
-        script: |
-          cd ios && pod install --repo-update
+        script: cd ios && pod install --repo-update
       - name: Build iOS for Simulator
-        script: |
-          flutter build ios --simulator --debug
+        script: flutter build ios --simulator --debug
       - name: Package for Appetize
         script: |
           cd build/ios/iphonesimulator
@@ -25,3 +22,20 @@ workflows:
           rm -rf Payload
     artifacts:
       - build/ios/iphonesimulator/Runner-simulator.zip
+
+  ios-appstore:
+    name: iOS App Store
+    max_build_duration: 60
+    environment:
+      flutter: 3.41.9
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Get Flutter dependencies
+        script: flutter pub get
+      - name: Set up iOS dependencies
+        script: cd ios && pod install --repo-update
+      - name: Build iOS for App Store
+        script: flutter build ipa --release --export-method app-store
+    artifacts:
+      - build/ios/ipa/*.ipa
