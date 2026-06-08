@@ -36,4 +36,4 @@ jobs:
       - name: Build & Upload
         run: |
           cd ios
-          fastlane beta
+          fastlane ios beta
