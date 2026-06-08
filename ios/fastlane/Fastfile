@@ -1,13 +1,6 @@
 platform :ios do
   desc "Build and upload to TestFlight"
   lane :beta do
-    create_keychain(
-      name: "build.keychain",
-      password: "temppass123",
-      default_keychain: true,
-      unlock: true,
-      timeout: 3600
-    )
     api_key = app_store_connect_api_key(
       key_id: ENV["APPSTORE_KEY_ID"],
       issuer_id: ENV["APPSTORE_ISSUER_ID"],
