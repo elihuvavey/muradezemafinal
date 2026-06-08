@@ -12,7 +12,8 @@ platform :ios do
     gym(
       scheme: "Runner",
       export_method: "app-store",
-      xcargs: "DEVELOPMENT_TEAM=K7R3D85XYA CODE_SIGN_STYLE=Automatic"
+      xcargs: "DEVELOPMENT_TEAM=K7R3D85XYA CODE_SIGN_STYLE=Automatic",
+      xcodebuild_formatter: "raw"
     )
     pilot(api_key: api_key)
   end
