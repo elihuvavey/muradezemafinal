@@ -35,10 +35,9 @@ workflows:
         script: flutter pub get
       - name: Set up iOS dependencies
         script: cd ios && pod install --repo-update
-      - name: Set up signing
+      - name: Fetch signing files
         script: |
-          keychain initialize
-          app-store-connect fetch-signing-files --bundle-id com.app.muradezema --type IOS_APP_STORE --create
+          app-store-connect fetch-signing-files com.app.muradezema --type IOS_APP_STORE --create
       - name: Build iOS for App Store
         script: |
           flutter build ipa --release --export-method app-store
