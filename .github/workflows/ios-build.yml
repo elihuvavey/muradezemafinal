@@ -1,37 +1,16 @@
-name: iOS Build & TestFlight
+name: iOS Build
 on:
   push:
     branches: [master]
 jobs:
   build:
     runs-on: macos-latest
-    env:
-      APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
-      APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-      APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.9'
+          flutter-version: "3.41.9"
           channel: stable
       - run: flutter pub get
-      - run: |
-          cd ios
-          pod install --repo-update
-      - name: Install Fastlane
-        run: gem install fastlane --no-document
-      - name: Build, Sign & Upload
-        env:
-          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
-          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-          APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
-        run: |
-          cd ios
-          fastlane ios beta
-      - name: Upload P12 artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: certificate
-          path: ios/certificate.p12.base64
+      - run: cd ios && pod install --repo-update
+      - run: flutter build ipa --release --export-method app-store
