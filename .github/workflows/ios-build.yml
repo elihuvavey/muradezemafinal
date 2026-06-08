@@ -12,34 +12,15 @@ jobs:
       APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
     steps:
       - uses: actions/checkout@v4
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.41.9'
           channel: stable
-      - name: Get Flutter packages
-        run: flutter pub get
-      - name: Install CocoaPods
-        run: |
+      - run: flutter pub get
+      - run: |
           cd ios
           pod install --repo-update
-      - name: Install Fastlane
-        run: gem install fastlane --no-document
-      - name: Build & Upload
-        env:
-          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
-          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-          APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
-        run: |
+      - run: gem install fastlane --no-document
+      - run: |
           cd ios
-          fastlane ios beta --verbose
-      - name: Upload certificate P12
-        uses: actions/upload-artifact@v4
-        with:
-          name: distribution-cert
-          path: ios/certificate.p12.base64
-      - name: Upload build log on failure
-        if: failure()
-        run: |
-          cat /Users/runner/Library/Logs/gym/Runner-Runner.log
+          fastlane ios beta
