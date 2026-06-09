@@ -1,4 +1,5 @@
 default_platform(:ios)
+
 platform :ios do
   lane :beta do
     api_key = app_store_connect_api_key(
@@ -8,12 +9,34 @@ platform :ios do
       is_key_content_base64: true,
       in_house: false
     )
+
     match(
       type: "appstore",
       app_identifier: ENV["APPLE_BUNDLE_ID"],
       git_url: ENV["MATCH_GIT_URL"],
       api_key: api_key,
       readonly: true
+    )
+
+    sh("cd ../.. && flutter build ios --release --no-codesign")
+
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      clean: false,
+      xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM='#{ENV['APPLE_TEAM_ID']}' PROVISIONING_PROFILE_SPECIFIER='match AppStore #{ENV['APPLE_BUNDLE_ID']}' CODE_SIGN_IDENTITY='Apple Distribution'",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          ENV["APPLE_BUNDLE_ID"] => "match AppStore #{ENV['APPLE_BUNDLE_ID']}"
+        }
+      },
+      disable_xcpretty: true
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true
     )
   end
 end
