@@ -11,7 +11,7 @@ jobs:
       - run: flutter pub get
       - run: cd ios && pod install --repo-update
       - run: gem install fastlane --no-document
-      - run: echo "$P8" > /tmp/key.p8 && cd ios && fastlane ios beta
+      - run: echo "$P8" | base64 --decode > /tmp/key.p8 && cd ios && fastlane ios beta
         env:
           APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
           APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
