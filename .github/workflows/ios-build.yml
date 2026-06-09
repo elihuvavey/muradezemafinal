@@ -35,11 +35,5 @@ jobs:
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_READONLY: ${{ github.event.inputs.match_readonly }}
-        run: bundle exec fastlane beta 2>&1 | tee fastlane.log
+        run: bundle exec fastlane beta
         working-directory: ios
-      - name: Upload log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: fastlane-log
-          path: ios/fastlane.log
