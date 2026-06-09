@@ -1,5 +1,13 @@
-name: iOS Build & Sign
-on: push
+name: iOS TestFlight
+on:
+  workflow_dispatch:
+    inputs:
+      match_readonly:
+        description: 'Readonly mode? Uncheck for first run'
+        required: true
+        type: boolean
+        default: true
+
 jobs:
   build:
     runs-on: macos-latest
@@ -7,15 +15,22 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.41.9"
+          channel: 'stable'
       - run: flutter pub get
-      - run: flutter build ios --release --no-codesign
-      - run: cd ios && pod install --repo-update
-      - run: gem install fastlane --no-document
-      - run: cd ios && fastlane ios beta
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: ios
+      - name: Fastlane Beta
         env:
           APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
           APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-          APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
+          APPSTORE_P8_BASE64: ${{ secrets.APPSTORE_P8_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_READONLY: ${{ github.event.inputs.match_readonly }}
+        run: bundle exec fastlane beta
+        working-directory: ios
