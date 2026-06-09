@@ -9,6 +9,7 @@ jobs:
         with:
           flutter-version: "3.41.9"
       - run: flutter pub get
+      - run: flutter build ios --release --no-codesign
       - run: cd ios && pod install --repo-update
       - run: gem install fastlane --no-document
       - run: cd ios && fastlane ios beta
