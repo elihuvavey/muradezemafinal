@@ -27,7 +27,7 @@ platform :ios do
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       clean: true,
-      xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM='#{ENV['APPLE_TEAM_ID']}' PROVISIONING_PROFILE_SPECIFIER='match AppStore #{ENV['APPLE_BUNDLE_ID']}'",
+      xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} PROVISIONING_PROFILE_SPECIFIER=match\ AppStore\ #{ENV['APPLE_BUNDLE_ID']} CODE_SIGN_IDENTITY=Apple\ Distribution: Filmon\ Habte"
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
