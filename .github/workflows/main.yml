@@ -25,12 +25,11 @@ jobs:
           APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
           APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
           APPSTORE_P8_BASE64: ${{ secrets.APPSTORE_P8_BASE64 }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-        run: bundle exec fastlane run match type:appstore app_identifier:"$APPLE_BUNDLE_ID" git_url:"$MATCH_GIT_URL" readonly:true
+        run: bundle exec fastlane ios beta
         working-directory: ios
       - run: flutter build ipa --release --export-method app-store
       - uses: actions/upload-artifact@v4
