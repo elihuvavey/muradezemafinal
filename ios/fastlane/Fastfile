@@ -27,12 +27,14 @@ platform :ios do
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       clean: true,
+      xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM='#{ENV['APPLE_TEAM_ID']}' PROVISIONING_PROFILE_SPECIFIER='match AppStore #{ENV['APPLE_BUNDLE_ID']}'",
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
-          "com.app.muradezema" => "match AppStore com.app.muradezema"
+          ENV["APPLE_BUNDLE_ID"] => "match AppStore #{ENV['APPLE_BUNDLE_ID']}"
         }
-      }
+      },
+      disable_xcpretty: true
     )
 
     upload_to_testflight(
