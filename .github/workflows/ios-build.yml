@@ -19,3 +19,11 @@ jobs:
       - name: Show errors only
         if: failure()
         run: grep -i "error" build.log || echo "No error lines found"
+      - name: Sign and Export
+        env:
+          KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          P8: ${{ secrets.APPSTORE_P8 }}
+        run: |
+          echo "$P8" > /tmp/key.p8
+          xcodebuild -exportArchive -archivePath build/ios/archive/Runner.xcarchive -exportPath build/ios/ipa -exportOptionsPlist ios/ExportOptions.plist -authenticationKeyID "$KEY_ID" -authenticationKeyIssuerID "$ISSUER_ID" -authenticationKeyPath /tmp/key.p8
