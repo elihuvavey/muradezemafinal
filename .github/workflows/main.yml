@@ -31,15 +31,7 @@ jobs:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
         run: bundle exec fastlane ios beta
         working-directory: ios
-      - run: flutter build ios --release --no-codesign
-      - name: Export IPA
-        run: |
-          cd ios
-          xcodebuild -exportArchive \
-            -archivePath ../build/ios/archive/Runner.xcarchive \
-            -exportPath ../build/ios/ipa \
-            -exportOptionsPlist ExportOptions.plist \
-            CODE_SIGN_STYLE=Manual
+      - run: flutter build ipa --release --export-method app-store
       - uses: actions/upload-artifact@v4
         with:
           name: Runner.ipa
