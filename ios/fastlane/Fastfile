@@ -21,6 +21,8 @@ platform :ios do
       readonly: ENV["MATCH_READONLY"] == "true"
     )
 
+    sh("cd ../.. && flutter build ios --release --no-codesign")
+
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
@@ -28,7 +30,7 @@ platform :ios do
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
-          ENV["APPLE_BUNDLE_ID"] => ENV["sigh_#{ENV['APPLE_BUNDLE_ID']}_appstore_profile-name"]
+          "com.app.muradezema" => "match AppStore com.app.muradezema"
         }
       }
     )
