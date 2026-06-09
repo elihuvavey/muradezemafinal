@@ -10,7 +10,6 @@ jobs:
           flutter-version: "3.41.9"
       - run: flutter pub get
       - run: cd ios && pod install --repo-update
-      - run: flutter build ios --release --no-codesign
       - run: gem install fastlane --no-document
       - run: echo "$P8" > /tmp/key.p8 && cd ios && fastlane ios beta
         env:
