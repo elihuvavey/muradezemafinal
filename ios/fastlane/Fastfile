@@ -21,8 +21,6 @@ platform :ios do
       readonly: ENV["MATCH_READONLY"] == "true"
     )
 
-    sh("cd ../.. && flutter build ios --release --no-codesign")
-
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",

@@ -17,12 +17,15 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter pub get
-      - run: cd ios && pod install --repo-update
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
           bundler-cache: true
           working-directory: ios
+      - run: gem install cocoapods
+      - run: pod install --repo-update
+        working-directory: ios
+      - run: flutter build ios --release --no-codesign
       - name: Fastlane Beta
         env:
           APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
