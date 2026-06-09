@@ -24,7 +24,7 @@ platform :ios do
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       clean: false,
-      xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM='#{ENV['APPLE_TEAM_ID']}'",
+      xcargs: "CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM='#{ENV['APPLE_TEAM_ID']}'",
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
