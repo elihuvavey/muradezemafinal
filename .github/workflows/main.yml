@@ -13,22 +13,7 @@ jobs:
           flutter-version: '3.41.9'
       - run: flutter pub get
       - run: cd ios && pod install --repo-update
-      - run: flutter build ios --release --no-codesign
-      - name: Sign and Export IPA
-        env:
-          KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
-          ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-          P8: ${{ secrets.APPSTORE_P8_BASE64 }}
-        run: |
-          echo "$P8" | base64 -d > /tmp/key.p8
-          cd ios
-          xcodebuild -exportArchive \
-            -archivePath ../build/ios/archive/Runner.xcarchive \
-            -exportPath ../build/ios/ipa \
-            -exportOptionsPlist ExportOptions.plist \
-            -authenticationKeyID "$KEY_ID" \
-            -authenticationKeyIssuerID "$ISSUER_ID" \
-            -authenticationKeyPath /tmp/key.p8
+      - run: flutter build ipa --release --export-method app-store
       - uses: actions/upload-artifact@v4
         with:
           name: Runner.ipa
