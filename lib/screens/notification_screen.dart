@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/dark_mode.dart';
 import '../provider/notification_provider.dart';
@@ -165,17 +165,17 @@ class NotificationTile extends StatelessWidget {
     String readableType;
     switch (item.type) {
       case 'audiopaid':
-        icon = LucideIcons.headphones;
+        icon = Icons.headphones;
         color = Colors.purpleAccent;
         readableType = 'Audio';
         break;
       case 'videopaid':
-        icon = LucideIcons.video;
+        icon = Icons.video_library;
         color = Colors.redAccent;
         readableType = 'Video';
         break;
       case 'bookpaid':
-        icon = LucideIcons.bookOpen;
+        icon = Icons.book;
         color = Colors.green;
         readableType = 'Book';
         break;
