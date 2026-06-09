@@ -17,6 +17,7 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter pub get
+      - run: cd ios && pod install --repo-update
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
