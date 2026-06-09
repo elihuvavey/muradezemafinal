@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'books_home.dart';
+import 'audio_home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 120,
             ),
             const SizedBox(height: 20),
-            const CustomText('Murade Zema', fontSize: 24, fontWeight: FontWeight.bold),
+            CustomText('Murade Zema', fontSize: 24, fontWeight: FontWeight.bold),
             const SizedBox(height: 10),
             LoadingAnimationWidget.inkDrop(
               color: Colors.orange,
