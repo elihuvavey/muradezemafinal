@@ -16,7 +16,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - run: flutter clean && rm -f pubspec.lock && flutter pub get
+      - run: flutter pub get
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
