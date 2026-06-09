@@ -1,7 +1,6 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Build, sign, and upload to TestFlight"
   lane :beta do
     setup_ci
 
@@ -26,8 +25,8 @@ platform :ios do
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
-      clean: true,
-      xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} PROVISIONING_PROFILE_SPECIFIER=match AppStore #{ENV['APPLE_BUNDLE_ID']} CODE_SIGN_IDENTITY=Apple Distribution: Filmon Habte",
+      clean: false,
+      xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM='#{ENV['APPLE_TEAM_ID']}' PROVISIONING_PROFILE_SPECIFIER='match AppStore #{ENV['APPLE_BUNDLE_ID']}' CODE_SIGN_IDENTITY='Apple Distribution'",
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
