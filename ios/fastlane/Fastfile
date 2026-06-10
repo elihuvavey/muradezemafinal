@@ -18,13 +18,11 @@ platform :ios do
       readonly: true
     )
 
-    sh("cd ../.. && flutter build ios --release --no-codesign")
-
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       clean: false,
-      xcargs: "CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM='#{ENV['APPLE_TEAM_ID']}' -allowProvisioningUpdates",
+      xcargs: "CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} -allowProvisioningUpdates",
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
