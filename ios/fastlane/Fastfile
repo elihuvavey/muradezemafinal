@@ -20,15 +20,10 @@ platform :ios do
       readonly: false
     )
 
-    sh("cd ../.. && flutter build ios --release --no-codesign")
-
-    sh("cd ../.. && xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath build/ios/Runner.xcarchive CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} -allowProvisioningUpdates")
-
-    sh("cd ../.. && xcodebuild -exportArchive -archivePath build/ios/Runner.xcarchive -exportPath build/ios/ipa -exportOptionsPlist ios/ExportOptions.plist")
+    sh("cd ../.. && flutter build ipa --release --export-options-plist=ios/ExportOptions.plist")
 
     upload_to_testflight(
       api_key: api_key,
-      ipa: "../build/ios/ipa/Runner.ipa",
       skip_waiting_for_build_processing: true
     )
   end
