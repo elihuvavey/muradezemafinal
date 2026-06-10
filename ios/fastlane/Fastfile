@@ -10,12 +10,17 @@ platform :ios do
       in_house: false
     )
 
+    match_nuke(
+      type: "appstore",
+      api_key: api_key
+    )
+
     match(
       type: "appstore",
       app_identifier: ENV["APPLE_BUNDLE_ID"],
       git_url: ENV["MATCH_GIT_URL"],
       api_key: api_key,
-      readonly: false, force: true
+      readonly: false
     )
 
     sh("cd ../.. && flutter build ios --release --no-codesign")
