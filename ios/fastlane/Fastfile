@@ -18,22 +18,15 @@ platform :ios do
       readonly: false, force: true
     )
 
-    build_app(
-      workspace: "Runner.xcworkspace",
-      scheme: "Runner",
-      clean: false,
-      xcargs: "CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']}",
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          ENV["APPLE_BUNDLE_ID"] => "match AppStore #{ENV['APPLE_BUNDLE_ID']}"
-        }
-      },
-      disable_xcpretty: true
-    )
+    sh("cd ../.. && flutter build ios --release --no-codesign")
+
+    sh("cd ../.. && xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath build/ios/Runner.xcarchive CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']} PROVISIONING_PROFILE_SPECIFIER='match AppStore #{ENV['APPLE_BUNDLE_ID']}'")
+
+    sh("cd ../.. && xcodebuild -exportArchive -archivePath build/ios/Runner.xcarchive -exportPath build/ios/ipa -exportOptionsPlist ios/ExportOptions.plist")
 
     upload_to_testflight(
       api_key: api_key,
+      ipa: "../build/ios/ipa/Runner.ipa",
       skip_waiting_for_build_processing: true
     )
   end
