@@ -15,7 +15,7 @@ platform :ios do
       app_identifier: ENV["APPLE_BUNDLE_ID"],
       git_url: ENV["MATCH_GIT_URL"],
       api_key: api_key,
-      readonly: true
+      readonly: false, force: true
     )
 
     build_app(
