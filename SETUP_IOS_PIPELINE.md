@@ -302,3 +302,105 @@ PIPELINE FLOW (What happens when you trigger)
 4. flutter build ios --no-codesign → Compiles Dart to .app
 5. build_app (gym) → Archives .xcarchive, signs with match certs, exports .ipa
 6. upload_to_testflight → Uploads to App Store Connect
+
+================================================================================
+ADDITIONAL FILES & CHANGES (Documented June 11, 2026)
+================================================================================
+
+--- .gitignore additions ---
+build/
+.dart_tool/
+
+--- ios/Runner/Info.plist (add before </dict>) ---
+<key>ITSAppUsesNonExemptEncryption</key>
+<false/>
+
+--- ios/Flutter/Debug.xcconfig (should match Release) ---
+#include "Generated.xcconfig"
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+#include "build.xcconfig"
+
+--- lib/utils/dio_client.dart (NEW FILE - auto-auth for guests) ---
+import 'package:dio/dio.dart';
+import 'package:muradezema/utils/user_prefs.dart';
+
+Dio createDio() {
+  final dio = Dio();
+  dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) {
+      final auth = options.headers['Authorization'];
+      if (auth != null && (auth.toString().contains('null') || auth.toString().endsWith('Bearer '))) {
+        options.headers.remove('Authorization');
+      }
+      final token = HivePrefs.getString('token');
+      if (token != null && token.isNotEmpty) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
+      handler.next(options);
+    },
+  ));
+  return dio;
+}
+
+--- lib/screens/splash_screen.dart changes ---
+- Import 'audio_home.dart' (NOT 'books_home.dart')
+- Import '../commons/custom_text.dart'
+- Remove login check: always navigate to BookHomeScreen (guest browsing fix)
+
+--- lib/screens/notification_screen.dart changes ---
+- Remove: import 'package:lucide_icons/lucide_icons.dart';
+- Add: import 'package:flutter/material.dart';
+- Replace: LucideIcons.headphones → Icons.headphones
+- Replace: LucideIcons.video → Icons.video_library
+- Replace: LucideIcons.bookOpen → Icons.book
+
+--- lib/screens/audio/player_task.dart changes ---
+- Add: import 'package:muradezema/utils/dio_client.dart';
+- Change: final Dio dio = Dio(); → final Dio dio = createDio();
+
+--- pubspec.yaml changes ---
+- Remove: lucide_icons: ^0.257.0
+
+--- pubspec.lock ---
+- Regenerate after removing lucide_icons: rm pubspec.lock && flutter pub get
+
+================================================================================
+BEFORE FIRST RUN CHECKLIST
+================================================================================
+
+[ ] Match repo created (private GitHub repo for certs)
+[ ] All 8 GitHub secrets added
+[ ] workflow YAML has Select Newest Xcode step
+[ ] Fastfile has setup_ci at the top
+[ ] Fastfile match() uses temp keychain (keychain_name + keychain_password)
+[ ] Fastfile has update_code_signing_settings BEFORE flutter build
+[ ] Fastfile uses flutter build ios --no-codesign (NOT flutter build ipa)
+[ ] Fastfile build_app has clean: false
+[ ] Fastfile upload_to_testflight has explicit ipa: path
+[ ] Matchfile has correct git_url, app_identifier, team_id
+[ ] Gemfile has fastlane + cocoapods
+[ ] ExportOptions.plist has manual signing with match profile
+[ ] build.xcconfig has DEVELOPMENT_TEAM + IPHONEOS_DEPLOYMENT_TARGET
+[ ] project.pbxproj: all CODE_SIGN_STYLE changed to Manual
+[ ] Podfile: post_install disables signing for all Pod targets
+[ ] Info.plist: ITSAppUsesNonExemptEncryption key added
+[ ] App icons: all PNGs stripped of alpha channel (RGB only)
+[ ] splash_screen.dart: imports audio_home.dart and custom_text.dart
+[ ] notification_screen.dart: uses Material icons, not lucide_icons
+[ ] player_task.dart: imports dio_client.dart, uses createDio()
+[ ] pubspec.yaml: no lucide_icons dependency
+[ ] pubspec.lock: regenerated (no lucide references)
+[ ] FIRST RUN: match() has readonly: false + force: true
+[ ] AFTER SUCCESS: match() reverted to readonly: true
+
+================================================================================
+TROUBLESHOOTING: What to check when build fails
+================================================================================
+
+1. View the fastlane summary in GitHub Actions log - it shows which step failed
+2. Download the xcodebuild-logs artifact from the run page
+3. Search for "error:" or "ARCHIVE FAILED" or "EXPORT FAILED" in logs
+4. Check Apple Developer portal for expired/maxed certificates
+5. Check Match repo for stale/revoked cert files
+6. Verify all GitHub secrets are set correctly
+7. Check disk space on runner (flutter build needs ~5GB)
