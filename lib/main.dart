@@ -57,6 +57,7 @@ import 'screens/signup_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'utils/nav_constants.dart';
 import 'utils/user_prefs.dart';
+import 'package:muradezema/services/iap_service.dart';
 import 'utils/developer_mode.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:receive_intent/receive_intent.dart';
@@ -76,6 +77,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 late AudioHandler audioHandler;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  IAPService.instance.initialize();
   print('Initializing app...');
 
   audioHandler = await AudioService.init(
