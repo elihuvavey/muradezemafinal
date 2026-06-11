@@ -51,5 +51,7 @@
 	<string>This app needs access to location when in the background to provide location-based currency.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs microphone access for audio recording features.</string>
 </dict>
 </plist>
