@@ -232,3 +232,57 @@ Phase 4 (Testing): 2-3 hours
 Phase 5 (Submission): 30 minutes
 
 Total estimated: 10-15 hours
+
+================================================================================
+IMPLEMENTATION STATUS (June 11, 2026)
+================================================================================
+
+✅ DONE: IAP Service (lib/services/iap_service.dart)
+   - Singleton pattern with StoreKit 2
+   - Local Hive storage for purchases
+   - Handles: purchase, restore, error, pending, canceled
+   - Saves to Hive BEFORE completing transaction (crash-safe)
+
+⏳ TODO: Add in_app_purchase to pubspec.yaml
+⏳ TODO: Initialize IAPService in main.dart
+⏳ TODO: Modify payment_screen.dart - hide external payments on iOS
+⏳ TODO: Add Restore Purchases button in profile_screen.dart
+⏳ TODO: Create IAP products in App Store Connect
+⏳ TODO: Add In-App Purchase capability in Xcode (entitlements)
+⏳ TODO: Test with Sandbox account on physical device
+⏳ TODO: Submit for App Review
+
+================================================================================
+NEXT STEPS (In Order)
+================================================================================
+
+1. Add packages to pubspec.yaml:
+   in_app_purchase: ^3.2.0
+
+2. Run: flutter pub get
+
+3. Initialize IAP in main.dart:
+   Add to main() before runApp():
+     IAPService.instance.initialize();
+
+4. Modify payment_screen.dart:
+   Wrap payment methods with Platform.isIOS check
+   iOS: Show IAP products only
+   Android: Keep existing PayPal/SantimPay/Bank
+
+5. Add Restore button to profile_screen.dart:
+   ElevatedButton(
+     onPressed: () => IAPService.instance.restorePurchases(),
+     child: Text('Restore Purchases'),
+   )
+
+6. Xcode: Open ios/Runner.xcworkspace
+   Runner target → Signing & Capabilities → + In-App Purchase
+
+7. App Store Connect:
+   Agreements, Tax, Banking → Sign Paid Applications
+   Features → In-App Purchases → Create products
+
+8. Test on physical iOS device with Sandbox account
+
+9. Trigger CI pipeline → TestFlight → Submit for Review
