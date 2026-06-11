@@ -20,9 +20,8 @@ platform :ios do
       readonly: false
     )
 
-    profile_name = ENV["sigh_com.app.muradezema_appstore_profile-name"]
 
-    sh("cd ../.. && flutter build ipa --release --verbose --export-options-plist=ios/ExportOptions.plist --code-sign-identity='Apple Distribution' --provisioning-profile-uuid='#{profile_name}' > flutter_build.log 2>&1")
+    sh("cd ../.. && flutter build ipa --release --verbose --export-options-plist=ios/ExportOptions.plist > flutter_build.log 2>&1")
 
     upload_to_testflight(
       api_key: api_key,
