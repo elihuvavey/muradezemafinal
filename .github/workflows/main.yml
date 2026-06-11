@@ -37,5 +37,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: flutter-build-log
-          path: flutter_build.log
+          name: xcodebuild-logs
+          path: build/ios/logs/

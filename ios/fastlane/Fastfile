@@ -1,44 +1,56 @@
 default_platform(:ios)
-
 platform :ios do
   lane :beta do
     setup_ci
-
+    
     api_key = app_store_connect_api_key(
-      key_id: ENV["APPSTORE_KEY_ID"],
-      issuer_id: ENV["APPSTORE_ISSUER_ID"],
-      key_content: ENV["APPSTORE_P8_BASE64"],
-      is_key_content_base64: true,
+      key_id: ENV["APPSTORE_KEY_ID"], 
+      issuer_id: ENV["APPSTORE_ISSUER_ID"], 
+      key_content: ENV["APPSTORE_P8_BASE64"], 
+      is_key_content_base64: true, 
       in_house: false
     )
-
+    
     match(
-      type: "appstore",
-      app_identifier: ENV["APPLE_BUNDLE_ID"],
-      git_url: ENV["MATCH_GIT_URL"],
-      api_key: api_key,
-      force: true,
-      force_for_new_certificates: true,
-      readonly: false,
-      keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "fastlane_tmp_keychain",
+      type: "appstore", 
+      app_identifier: ENV["APPLE_BUNDLE_ID"], 
+      git_url: ENV["MATCH_GIT_URL"], 
+      api_key: api_key, 
+      readonly: true,
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "fastlane_tmp_keychain", 
       keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
     )
-
+    
     update_code_signing_settings(
-      use_automatic_signing: false,
-      path: "Runner.xcodeproj",
-      team_id: ENV["APPLE_TEAM_ID"],
-      code_sign_identity: "Apple Distribution",
-      profile_name: ENV["sigh_#{ENV['APPLE_BUNDLE_ID']}_appstore"],
-      targets: ["Runner"],
+      use_automatic_signing: false, 
+      path: "Runner.xcodeproj", 
+      team_id: ENV["APPLE_TEAM_ID"], 
+      code_sign_identity: "Apple Distribution", 
+      profile_name: ENV["sigh_#{ENV['APPLE_BUNDLE_ID']}_appstore"], 
+      targets: ["Runner"], 
       build_configurations: ["Release"]
     )
-
-    sh("cd .. && flutter build ipa --release --verbose --build-number=#{ENV['GITHUB_RUN_NUMBER']} --export-options-plist=ios/ExportOptions.plist")
-
+    
+    sh("cd .. && flutter build ios --release --no-codesign --build-number=#{ENV['GITHUB_RUN_NUMBER']}")
+    
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      clean: false,
+      output_directory: "../build/ios/ipa",
+      buildlog_path: "../build/ios/logs",
+      export_method: "app-store",
+      export_options: {
+        signingStyle: "manual",
+        provisioningProfiles: { 
+          ENV["APPLE_BUNDLE_ID"] => ENV["sigh_#{ENV['APPLE_BUNDLE_ID']}_appstore"]
+        }
+      }
+    )
+    
     upload_to_testflight(
-      ipa: Dir["../build/ios/ipa/*.ipa"].first,
-      api_key: api_key,
+      ipa: Dir["../build/ios/ipa/*.ipa"].first, 
+      api_key: api_key, 
       skip_waiting_for_build_processing: true
     )
   end
