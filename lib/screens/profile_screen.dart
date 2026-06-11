@@ -7,6 +7,7 @@ import 'package:muradezema/provider/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'dart:io';
+import 'package:muradezema/services/iap_service.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -433,7 +434,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
               SizedBox(height: 20.h),
-              Text('Change Password',
+            tooltip: 'Change Password',
+          ),
+          if (Platform.isIOS)
+            IconButton(
+              icon: const Icon(Icons.restore),
+              onPressed: () => IAPService.instance.restorePurchases(),
+              tooltip: 'Restore Purchases',
+            ),
+          ),
+          if (Platform.isIOS)
+            IconButton(
+              icon: const Icon(Icons.restore),
+              onPressed: () => IAPService.instance.restorePurchases(),
+              tooltip: 'Restore Purchases',
                   style:
                       TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
               SizedBox(height: 20.h),
@@ -536,6 +550,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             icon: const Icon(Icons.lock),
             onPressed: _showChangePwSheet,
             tooltip: 'Change Password',
+          ),
+          if (Platform.isIOS)
+            IconButton(
+              icon: const Icon(Icons.restore),
+              onPressed: () => IAPService.instance.restorePurchases(),
+              tooltip: 'Restore Purchases',
           ),
         ],
       ),
