@@ -20,6 +20,15 @@ platform :ios do
       readonly: false
     )
 
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Runner.xcodeproj",
+      team_id: ENV["APPLE_TEAM_ID"],
+      code_sign_identity: "Apple Distribution",
+      profile_name: ENV["sigh_com.app.muradezema_appstore_profile-name"],
+      targets: ["Runner"],
+      build_configurations: ["Release"]
+    )
 
     sh("cd ../.. && flutter build ipa --release --verbose --export-options-plist=ios/ExportOptions.plist > flutter_build.log 2>&1")
 
