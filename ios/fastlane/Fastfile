@@ -29,14 +29,15 @@ platform :ios do
       path: "Runner.xcodeproj",
       team_id: ENV["APPLE_TEAM_ID"],
       code_sign_identity: "Apple Distribution",
-      profile_name: ENV["sigh_com.app.muradezema_appstore_profile-name"],
+      profile_name: ENV["sigh_#{ENV['APPLE_BUNDLE_ID']}_appstore"],
       targets: ["Runner"],
       build_configurations: ["Release"]
     )
 
-    sh("cd ../.. && flutter build ipa --release --verbose --export-options-plist=ios/ExportOptions.plist > flutter_build.log 2>&1")
+    sh("cd .. && flutter build ipa --release --verbose --build-number=${GITHUB_RUN_NUMBER} --export-options-plist=ios/ExportOptions.plist 2>&1 | tee flutter_build.log")
 
     upload_to_testflight(
+      ipa: Dir["../build/ios/ipa/*.ipa"].first,
       api_key: api_key,
       skip_waiting_for_build_processing: true
     )
