@@ -34,7 +34,7 @@ platform :ios do
       build_configurations: ["Release"]
     )
 
-    sh("cd .. && flutter build ipa --release --verbose --build-number=${GITHUB_RUN_NUMBER} --export-options-plist=ios/ExportOptions.plist 2>&1 | tee flutter_build.log")
+    sh("cd .. && flutter build ipa --release --verbose --build-number=$GITHUB_RUN_NUMBER --export-options-plist=ios/ExportOptions.plist 2>&1 | tee flutter_build.log")
 
     upload_to_testflight(
       ipa: Dir["../build/ios/ipa/*.ipa"].first,
