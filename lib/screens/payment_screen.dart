@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,9 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   List<Map<String, String>> get paymentMethods {
+    if (Platform.isIOS) {
+      return []; // iOS uses IAP only
+    }
     if (HivePrefs.getBool('isLocal') == true) {
       return [
         {
