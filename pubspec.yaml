@@ -13,7 +13,7 @@ dependencies:
 
   
   cupertino_icons: ^1.0.8
-  in_app_purchase: ^0.5.1
+  in_app_purchase: ^3.2.0
   flutter_screenutil: ^5.9.3
   just_audio: ^0.9.46
   video_player: ^2.9.5
