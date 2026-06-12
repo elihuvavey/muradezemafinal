@@ -64,7 +64,7 @@ class _AudioHomeScreenState extends State<AudioHomeScreen> {
     _checkLocation();
     updateFcmToken();
 
-    disableScreenshot();
+    // disableScreenshot(); // Disabled for App Store screenshots
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Only show the country dialog if not already set
       bool hasSelectedCountry =
