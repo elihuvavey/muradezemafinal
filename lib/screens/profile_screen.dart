@@ -7,6 +7,7 @@ import 'package:muradezema/provider/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'dart:io';
+import 'package:muradezema/services/iap_service.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -103,6 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                   });
                 },
               ),
+              if (Platform.isIOS)
+                IconButton(
+                  icon: const Icon(Icons.restore),
+                  onPressed: () => IAPService.instance.restorePurchases(),
+                  tooltip: 'Restore Purchases',
+                ),
             ],
           ),
           body: Consumer<ProfileProvider>(builder: (context, value, child) {
