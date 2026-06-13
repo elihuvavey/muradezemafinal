@@ -16,7 +16,7 @@ platform :ios do
       app_identifier: ENV["APPLE_BUNDLE_ID"], 
       git_url: ENV["MATCH_GIT_URL"], 
       api_key: api_key, 
-      readonly: true,
+      readonly: false,
       keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "fastlane_tmp_keychain", 
       keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
     )
