@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:muradezema/services/iap_service.dart';
 import 'package:muradezema/utils/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,19 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   List<Map<String, String>> get paymentMethods {
     if (Platform.isIOS) {
-      return []; // iOS uses IAP only
+      // Show IAP products on iOS
+      if (IAPService.instance.availableProducts.isNotEmpty) {
+        return IAPService.instance.availableProducts.map((p) => {
+          'icon': 'assets/images/apple_iap.png',
+          'name': '${p.title} - ${p.price}',
+          'productId': p.id,
+        }).toList();
+      }
+      return [{
+        'icon': 'assets/images/apple_iap.png',
+        'name': 'In-App Purchase',
+        'productId': '${widget.type}.${widget.productId}',
+      }];
     }
     if (HivePrefs.getBool('isLocal') == true) {
       return [
@@ -80,7 +93,26 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   void initState() {
     super.initState();
-    _fetchBanks();
+    if (Platform.isIOS) {
+      IAPService.instance.onPurchaseSuccess = (productId) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Purchase successful!')),
+          );
+          Navigator.pop(context, true);
+        }
+      };
+      IAPService.instance.onPurchaseError = (error) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Purchase failed: $error')),
+          );
+        }
+      };
+      IAPService.instance.fetchProducts({'com.app.muradezema.audio.test'});
+    } else {
+      _fetchBanks();
+    }
   }
 
   Future<void> _fetchBanks() async {
@@ -642,6 +674,21 @@ class _PaymentPageState extends State<PaymentPage> {
 
   Future<void> _handlePayment() async {
     debugPrint('Handle payment called');
+    
+    // iOS: Use In-App Purchase
+    if (Platform.isIOS) {
+      if (selectedMethodIndex != null && selectedMethodIndex! < paymentMethods.length) {
+        final productId = paymentMethods[selectedMethodIndex!]['productId'];
+        if (productId != null) {
+          setState(() => isLoading = true);
+          await IAPService.instance.buyProduct(productId);
+          setState(() => isLoading = false);
+          return;
+        }
+      }
+      return;
+    }
+    
     final methodName = selectedMethodIndex != null
         ? paymentMethods[selectedMethodIndex!]['name']?.toLowerCase()
         : null;
