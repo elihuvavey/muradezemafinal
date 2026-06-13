@@ -44,13 +44,13 @@ class _PaymentPageState extends State<PaymentPage> {
       // Show IAP products on iOS
       if (IAPService.instance.availableProducts.isNotEmpty) {
         return IAPService.instance.availableProducts.map((p) => {
-          'icon': 'assets/images/apple_iap.png',
+          'icon': '__IAP_ICON__',
           'name': '${p.title} - ${p.price}',
           'productId': p.id,
         }).toList();
       }
       return [{
-        'icon': 'assets/images/apple_iap.png',
+        'icon': '__IAP_ICON__',
         'name': 'In-App Purchase',
         'productId': '${widget.type}.${widget.productId}',
       }];
@@ -603,10 +603,12 @@ class _PaymentPageState extends State<PaymentPage> {
                                 color: Colors.white24,
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: Image.asset(
-                                method['icon']!,
-                                fit: BoxFit.contain,
-                              ),
+                              child: method['icon'] == '__IAP_ICON__'
+                                  ? Icon(Icons.apple, color: Colors.white, size: 30)
+                                  : Image.asset(
+                                      method['icon']!,
+                                      fit: BoxFit.contain,
+                                    ),
                             ),
                             SizedBox(width: 16.h),
                             Text(
