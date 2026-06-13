@@ -1,0 +1,130 @@
+[1mdiff --git a/lib/services/iap_service.dart b/lib/services/iap_service.dart[m
+[1mindex 7710f50..e6324c9 100644[m
+[1m--- a/lib/services/iap_service.dart[m
+[1m+++ b/lib/services/iap_service.dart[m
+[36m@@ -1,119 +1,14 @@[m
+[31m-import 'dart:async';[m
+[31m-import 'dart:io';[m
+[31m-import 'package:flutter/foundation.dart';[m
+[31m-import 'package:in_app_purchase/in_app_purchase.dart';[m
+[31m-import 'package:muradezema/utils/user_prefs.dart';[m
+[32m+[m[32m/// IAP Service - Placeholder[m
+[32m+[m[32m/// Install in_app_purchase package when ready for App Store submission[m
+[32m+[m[32m/// This file exists to prevent import errors in main.dart and profile_screen.dart[m
+ [m
+ class IAPService {[m
+   static final IAPService instance = IAPService._internal();[m
+   IAPService._internal();[m
+ [m
+[31m-  final InAppPurchase _iap = InAppPurchase.instance;[m
+[31m-  late StreamSubscription<List<PurchaseDetails>> _subscription;[m
+[31m-  List<ProductDetails> availableProducts = [];[m
+   bool isAvailable = false;[m
+[31m-  bool isRestoring = false;[m
+ [m
+[31m-  // UI callbacks[m
+[31m-  Function(String productId)? onPurchaseSuccess;[m
+[31m-  Function(String error)? onPurchaseError;[m
+[31m-  VoidCallback? onRestoreComplete;[m
+[31m-[m
+[31m-  void initialize() {[m
+[31m-    _subscription = _iap.purchaseStream.listen([m
+[31m-      _listenToPurchaseUpdated,[m
+[31m-      onDone: () => _subscription.cancel(),[m
+[31m-      onError: (error) => debugPrint('IAP Stream Error: $error'),[m
+[31m-    );[m
+[31m-  }[m
+[31m-[m
+[31m-  void dispose() => _subscription.cancel();[m
+[31m-[m
+[31m-  Future<void> fetchProducts(Set<String> productIds) async {[m
+[31m-    isAvailable = await _iap.isAvailable();[m
+[31m-    if (isAvailable && Platform.isIOS) {[m
+[31m-      final response = await _iap.queryProductDetails(productIds);[m
+[31m-      availableProducts = response.productDetails;[m
+[31m-      if (response.notFoundIDs.isNotEmpty) {[m
+[31m-        debugPrint('IAP: Products not found: ${response.notFoundIDs}');[m
+[31m-      }[m
+[31m-    }[m
+[31m-  }[m
+[31m-[m
+[31m-  Future<void> buyProduct(String productId) async {[m
+[31m-    try {[m
+[31m-      final product = availableProducts.firstWhere((p) => p.id == productId);[m
+[31m-      final param = PurchaseParam(productDetails: product);[m
+[31m-      await _iap.buyNonConsumable(purchaseParam: param);[m
+[31m-    } catch (e) {[m
+[31m-      debugPrint('IAP: Buy failed - $e');[m
+[31m-      onPurchaseError?.call('Purchase failed: $e');[m
+[31m-    }[m
+[31m-  }[m
+[31m-[m
+[31m-  Future<void> restorePurchases() async {[m
+[31m-    isRestoring = true;[m
+[31m-    await _iap.restorePurchases();[m
+[31m-  }[m
+[31m-[m
+[31m-  void _listenToPurchaseUpdated(List<PurchaseDetails> detailsList) {[m
+[31m-    for (var details in detailsList) {[m
+[31m-      debugPrint('IAP: ${details.productID} -> ${details.status}');[m
+[31m-[m
+[31m-      switch (details.status) {[m
+[31m-        case PurchaseStatus.pending:[m
+[31m-          break;[m
+[31m-[m
+[31m-        case PurchaseStatus.error:[m
+[31m-          onPurchaseError?.call(details.error?.message ?? 'Unknown error');[m
+[31m-          _finishTransaction(details);[m
+[31m-          break;[m
+[31m-[m
+[31m-        case PurchaseStatus.purchased:[m
+[31m-        case PurchaseStatus.restored:[m
+[31m-          _deliverProduct(details);[m
+[31m-          break;[m
+[31m-[m
+[31m-        case PurchaseStatus.canceled:[m
+[31m-          _finishTransaction(details);[m
+[31m-          break;[m
+[31m-      }[m
+[31m-    }[m
+[31m-[m
+[31m-    if (isRestoring) {[m
+[31m-      isRestoring = false;[m
+[31m-      onRestoreComplete?.call();[m
+[31m-    }[m
+[31m-  }[m
+[31m-[m
+[31m-  void _deliverProduct(PurchaseDetails details) {[m
+[31m-    final productId = details.productID;[m
+[31m-    // Format: com.app.muradezema.[type].[id][m
+[31m-    final parts = productId.split('.');[m
+[31m-    if (parts.length >= 5) {[m
+[31m-      final contentId = parts.sublist(4).join('.');[m
+[31m-      final purchasedIds = HivePrefs.getStringList('purchased_audio_ids') ?? [];[m
+[31m-      if (!purchasedIds.contains(contentId)) {[m
+[31m-        purchasedIds.add(contentId);[m
+[31m-        HivePrefs.saveStringList('purchased_audio_ids', purchasedIds);[m
+[31m-        debugPrint('IAP: Unlocked content: $contentId');[m
+[31m-      }[m
+[31m-    } else {[m
+[31m-      // Simple product ID (no dot notation)[m
+[31m-      final purchasedIds = HivePrefs.getStringList('purchased_audio_ids') ?? [];[m
+[31m-      if (!purchasedIds.contains(productId)) {[m
+[31m-        purchasedIds.add(productId);[m
+[31m-        HivePrefs.saveStringList('purchased_audio_ids', purchasedIds);[m
+[31m-        debugPrint('IAP: Unlocked product: $productId');[m
+[31m-      }[m
+[31m-    }[m
+[31m-    onPurchaseSuccess?.call(productId);[m
+[31m-    _finishTransaction(details);[m
+[31m-  }[m
+[31m-[m
+[31m-  void _finishTransaction(PurchaseDetails details) {[m
+[31m-    if (details.pendingCompletePurchase) {[m
+[31m-      _iap.completePurchase(details);[m
+[31m-    }[m
+[31m-  }[m
+[32m+[m[32m  void initialize() {}[m
+[32m+[m[32m  void dispose() {}[m
+[32m+[m[32m  Future<void> restorePurchases() async {}[m
+ }[m
