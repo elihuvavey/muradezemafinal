@@ -109,7 +109,7 @@ class _PaymentPageState extends State<PaymentPage> {
           );
         }
       };
-      IAPService.instance.fetchProducts({'com.app.muradezema.audio.test'});
+      IAPService.instance.fetchProducts({'com.app.muradezema.audio.premium'});
     } else {
       _fetchBanks();
     }
